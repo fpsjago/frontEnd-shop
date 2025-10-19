@@ -10,3 +10,19 @@ import ProductAdminPanel from "../../components/products/ProductAdminPanel";
   <ProductAdminPanel client:load />
 
 </Layout>
+
+<script>
+  // Client-side authentication check
+  function checkAuth() {
+    const token = localStorage.getItem("frontend_shop_token");
+
+    if (!token) {
+      const baseUrl = import.meta.env.BASE_URL ?? "/";
+      const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+      window.location.replace(`${normalizedBase}login`);
+    }
+  }
+
+  // Run auth check immediately
+  checkAuth();
+</script>
