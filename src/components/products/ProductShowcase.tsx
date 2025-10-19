@@ -14,6 +14,7 @@ export interface ProductShowcaseProps extends ListProductsOptions {
   actionLabel?: string;
   fallbackItems?: Product[];
   onProductSelect?: (product: Product) => void;
+  displayLimit?: number;
 }
 
 const FALLBACK_PRODUCTS: Product[] = [
@@ -64,6 +65,7 @@ const ProductShowcase = ({
   actionLabel = "Add to Cart",
   fallbackItems = FALLBACK_PRODUCTS,
   onProductSelect,
+  displayLimit,
   search: initialSearch,
   category: initialCategory,
   tags: initialTags,
@@ -153,6 +155,8 @@ const ProductShowcase = ({
   ]);
 
   const showEmptyState = !isLoading && !error && products.length === 0;
+  const itemsToRender = displayLimit ? products.slice(0, displayLimit) : products;
+  const itemsCountLabel = isLoading ? "Loading..." : `${itemsToRender.length} products`;
 
   return (
     <section className="product-showcase">
@@ -222,9 +226,7 @@ const ProductShowcase = ({
         </div>
 
         <div className="product-showcase__results-info">
-          <span className="product-showcase__count">
-            {isLoading ? "Loading..." : `${products.length} products`}
-          </span>
+          <span className="product-showcase__count">{itemsCountLabel}</span>
         </div>
       </div>
 
@@ -269,9 +271,9 @@ const ProductShowcase = ({
         </div>
       ) : null}
 
-      {!isLoading && products.length > 0 ? (
+      {!isLoading && itemsToRender.length > 0 ? (
         <div className={`product-grid product-grid--${viewMode}`} aria-live="polite">
-          {products.map((product) => (
+          {itemsToRender.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
