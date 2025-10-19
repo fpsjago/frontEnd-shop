@@ -192,8 +192,28 @@ export class ApiClient {
   }
 }
 
+function resolveBaseUrl() {
+  const configuredRaw = (import.meta.env.PUBLIC_API_URL ?? "").trim();
+  const sanitizedConfigured =
+    configuredRaw.length > 0 ? configuredRaw.replace(/\/+$/, "") : "";
+
+  if (typeof window !== "undefined") {
+    const isGitHubPagesHost = window.location.hostname.endsWith("github.io");
+    if (isGitHubPagesHost) {
+      if (!sanitizedConfigured || sanitizedConfigured.includes("localhost")) {
+        return "https://backend-shop-m2mf.onrender.com";
+      }
+    }
+  }
+
+  if (sanitizedConfigured) {
+    return sanitizedConfigured;
+  }
+
+  return "http://localhost:3000";
+}
+
 // Default shared client used across the app. Inject PUBLIC_API_URL to point at the backend.
 export const apiClient = new ApiClient({
-  
-  baseUrl: import.meta.env.PUBLIC_API_URL ?? "",
+  baseUrl: resolveBaseUrl(),
 });
