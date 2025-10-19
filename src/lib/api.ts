@@ -55,6 +55,31 @@ export class ApiClient {
     }
   }
 
+  removeHeader(name: string) {
+    const target = name.toLowerCase();
+    if (Array.isArray(this.defaultHeaders)) {
+      this.defaultHeaders = this.defaultHeaders.filter(
+        ([headerName]) => headerName.toLowerCase() !== target,
+      );
+    } else if (this.defaultHeaders instanceof Headers) {
+      const toRemove: string[] = [];
+      this.defaultHeaders.forEach((_, headerName) => {
+        if (headerName.toLowerCase() === target) {
+          toRemove.push(headerName);
+        }
+      });
+      toRemove.forEach((headerName) => this.defaultHeaders.delete(headerName));
+    } else {
+      const headers = { ...(this.defaultHeaders as Record<string, string>) };
+      Object.keys(headers).forEach((key) => {
+        if (key.toLowerCase() === target) {
+          delete headers[key];
+        }
+      });
+      this.defaultHeaders = headers;
+    }
+  }
+
   // Build the absolute URL for a request, including optional query params.
   private buildUrl(path: string, query?: ApiRequestOptions["query"]) {
     const url = new URL(path.replace(/^\//, ""), this.baseUrl || "http://local-placeholder");

@@ -96,6 +96,18 @@ const ProductShowcase = ({
       setIsLoading(true);
       setError(null);
       setUsingFallback(false);
+      const filterOptions: ClientFilterOptions = {
+        search,
+        category: selectedCategory,
+        tags: initialTags,
+        minPrice,
+        maxPrice,
+        sort: sortBy,
+        featured: initialFeatured,
+        page,
+        limit,
+      };
+
       try {
         const options: ListProductsOptions = {
           search: search || undefined,
@@ -108,15 +120,18 @@ const ProductShowcase = ({
           limit,
           featured: initialFeatured,
         };
+
         const { items } = await productService.list(options);
         if (cancelled) return;
 
         if (items.length === 0 && (fallbackItems?.length ?? 0) > 0) {
-          setProducts(fallbackItems);
+          const filteredFallback = applyClientFilters(fallbackItems, filterOptions);
+          setProducts(filteredFallback);
           setUsingFallback(true);
           setError(null);
         } else {
-          setProducts(items);
+          const filteredItems = applyClientFilters(items, filterOptions);
+          setProducts(filteredItems);
           setUsingFallback(false);
         }
       } catch (err) {
@@ -124,7 +139,8 @@ const ProductShowcase = ({
         if (!cancelled) {
           const fallback = fallbackItems ?? [];
           if (fallback.length) {
-            setProducts(fallback);
+            const filteredFallback = applyClientFilters(fallback, filterOptions);
+            setProducts(filteredFallback);
             setUsingFallback(true);
           }
           setError(extractErrorMessage(err));
@@ -300,6 +316,105 @@ function extractErrorMessage(error: unknown) {
     return error.message;
   }
   return "Unable to load products.";
+}
+
+interface ClientFilterOptions {
+  search?: string | null;
+  category?: string;
+  tags?: string[] | null;
+  minPrice?: number;
+  maxPrice?: number;
+  sort?: string;
+  featured?: boolean;
+  page?: number;
+  limit?: number;
+}
+
+function applyClientFilters(products: Product[], options: ClientFilterOptions): Product[] {
+  let filtered = [...products];
+
+  const searchQuery = options.search?.trim().toLowerCase();
+  if (searchQuery) {
+    filtered = filtered.filter((product) => {
+      const combined = [
+        product.name,
+        product.summary,
+        product.description,
+        product.serialNumber,
+        ...(product.tags ?? []),
+        ...(product.badges ?? []),
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return combined.includes(searchQuery);
+    });
+  }
+
+  if (options.tags && options.tags.length > 0) {
+    const tagSet = new Set(options.tags.map((tag) => tag.toLowerCase()));
+    filtered = filtered.filter((product) => {
+      const productTags = product.tags?.map((tag) => tag.toLowerCase()) ?? [];
+      return productTags.some((tag) => tagSet.has(tag));
+    });
+  }
+
+  if (options.category) {
+    const categoryQuery = options.category.toLowerCase();
+    filtered = filtered.filter((product) => {
+      const tags = product.tags?.map((tag) => tag.toLowerCase()) ?? [];
+      return tags.includes(categoryQuery);
+    });
+  }
+
+  if (typeof options.minPrice === "number") {
+    filtered = filtered.filter((product) => {
+      const price = product.price?.amount;
+      return typeof price === "number" ? price >= options.minPrice! : false;
+    });
+  }
+
+  if (typeof options.maxPrice === "number") {
+    filtered = filtered.filter((product) => {
+      const price = product.price?.amount;
+      return typeof price === "number" ? price <= options.maxPrice! : false;
+    });
+  }
+
+  if (typeof options.featured === "boolean") {
+    filtered = filtered.filter((product) => Boolean(product.featured) === options.featured);
+  }
+
+  switch (options.sort) {
+    case "price_asc":
+      filtered.sort((a, b) => (a.price?.amount ?? Infinity) - (b.price?.amount ?? Infinity));
+      break;
+    case "price_desc":
+      filtered.sort((a, b) => (b.price?.amount ?? -Infinity) - (a.price?.amount ?? -Infinity));
+      break;
+    case "rating":
+      filtered.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+      break;
+    case "newest":
+      filtered.sort((a, b) => {
+        const aDate = a.createdAt ? Date.parse(a.createdAt) : 0;
+        const bDate = b.createdAt ? Date.parse(b.createdAt) : 0;
+        return bDate - aDate;
+      });
+      break;
+    default:
+      filtered.sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
+      break;
+  }
+
+  const limit = options.limit;
+  if (typeof limit === "number" && limit > 0) {
+    const page = Math.max(options.page ? Math.floor(options.page) : 1, 1);
+    const start = (page - 1) * limit;
+    filtered = filtered.slice(start, start + limit);
+  }
+
+  return filtered;
 }
 
 export default ProductShowcase;
