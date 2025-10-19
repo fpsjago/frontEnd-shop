@@ -1,0 +1,27 @@
+{
+  "name": "awesome-aurora",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.4.0",
+    "@aws-sdk/client-s3": "^3.913.0",
+    "@prisma/client": "^6.17.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "astro": "^5.14.6",
+    "axios": "^1.12.2",
+    "express": "^5.1.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.8.1"
+  }
+}

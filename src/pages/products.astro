@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ProductShowcase from "../components/products/ProductShowcase";
+---
+
+<Layout
+  title="Products | Frontend Shop"
+  description="Explore components, templates, and resources curated for modern frontend teams."
+>
+  <ProductShowcase
+    client:load
+    heading="Curated drops for interface teams"
+    description="Hand-picked kits, templates, and motion presets sourced from the community marketplace."
+    statusBadge="Live sync"
+    limit={6}
+    featured
+  />
+</Layout>

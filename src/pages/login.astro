@@ -1,0 +1,14 @@
+---
+import BaseLayout from "../layouts/Layout.astro";
+import LoginForm from "../components/auth/LoginForm";
+---
+
+<BaseLayout title="Login | Frontend Shop" description="Access your Frontend Shop account.">
+  <LoginForm
+    client:load
+    forgotPasswordHref="/reset-password"
+    createAccountHref="/signup"
+    subtitle="Shop smarter with a unified dashboard for your orders, wishlist, and rewards."
+    redirectTo="/admin"
+  />
+</BaseLayout>

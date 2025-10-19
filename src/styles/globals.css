@@ -1,0 +1,129 @@
+@import "./variables.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body.page {
+  background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 45%),
+    radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.14), transparent 60%),
+    var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+.site-header {
+  padding-inline: var(--space-xl);
+  padding-block: var(--space-lg);
+}
+
+.site-header__inner {
+  margin: 0 auto;
+  max-width: var(--content-max-width);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+}
+
+.site-brand {
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.site-nav {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.site-nav a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 160ms ease;
+}
+
+.site-nav a:hover,
+.site-nav a:focus-visible {
+  color: var(--color-text);
+}
+
+.site-main {
+  margin: 0 auto;
+  max-width: var(--content-max-width);
+  padding-inline: var(--space-xl);
+  padding-bottom: var(--space-xl);
+}
+
+.site-footer {
+  padding-inline: var(--space-xl);
+  padding-block: var(--space-lg);
+}
+
+.site-footer__inner {
+  margin: 0 auto;
+  max-width: var(--content-max-width);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.surface-card {
+  background-color: rgba(15, 23, 42, 0.75);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-elevated);
+  padding: var(--space-xl);
+}
+
+button {
+  font: inherit;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  background: var(--color-accent);
+  color: #0b1120;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px rgba(56, 189, 248, 0.35);
+}
+
+@media (max-width: 720px) {
+  .site-header__inner,
+  .site-footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .site-main {
+    padding-inline: var(--space-lg);
+  }
+}

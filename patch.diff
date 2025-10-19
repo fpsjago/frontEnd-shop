@@ -1,0 +1,22 @@
+*** Update File: src/components/products/useProductAdmin.ts
+@@
+-function prepareImageField(
+-  value: string,
+-): { url: string | undefined; upload?: EncodedImagePayload } {
++function prepareImageField(
++  value: string,
++  filename?: string,
++): { url: string | undefined; upload?: EncodedImagePayload } {
+@@
+-  return {
+-    url: trimmed,
++  return {
++    url: undefined,
+     upload: {
+       data,
+       contentType,
++      filename,
+     },
+   };
+ }
+*** End Patch

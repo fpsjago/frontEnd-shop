@@ -1,0 +1,12 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProductShowcase from "../../components/products/ProductShowcase";
+import ProductAdminPanel from "../../components/products/ProductAdminPanel";
+---
+
+<Layout title="Admin Dashboard | Frontend Shop">
+  <h1>ADMIND PANEL</h1>
+
+  <ProductAdminPanel client:load />
+
+</Layout>

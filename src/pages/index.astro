@@ -1,0 +1,150 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ProductShowcase from "../components/products/ProductShowcase";
+import "../styles/components/homepage.css";
+---
+
+<Layout title="Home | Frontend Shop">
+  <div class="homepage">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero__background">
+        <div class="hero__gradient hero__gradient--1"></div>
+        <div class="hero__gradient hero__gradient--2"></div>
+        <div class="hero__gradient hero__gradient--3"></div>
+      </div>
+
+      <div class="hero__content">
+        <div class="hero__badge">
+          <span class="hero__badge-icon">✨</span>
+          <span>New Arrivals Weekly</span>
+        </div>
+
+        <h1 class="hero__title">
+          Discover Premium
+          <span class="hero__title-gradient">Frontend Products</span>
+        </h1>
+
+        <p class="hero__description">
+          Curated collection of high-quality UI kits, templates, and tools designed by professionals for modern web development. Elevate your projects with our handpicked selection.
+        </p>
+
+        <div class="hero__actions">
+          <button class="hero__cta hero__cta--primary">
+            <span>Explore Products</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="hero__cta hero__cta--secondary">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
+            </svg>
+            <span>Watch Demo</span>
+          </button>
+        </div>
+
+        <div class="hero__stats">
+          <div class="hero__stat">
+            <div class="hero__stat-value">500+</div>
+            <div class="hero__stat-label">Premium Products</div>
+          </div>
+          <div class="hero__stat-divider"></div>
+          <div class="hero__stat">
+            <div class="hero__stat-value">50K+</div>
+            <div class="hero__stat-label">Happy Customers</div>
+          </div>
+          <div class="hero__stat-divider"></div>
+          <div class="hero__stat">
+            <div class="hero__stat-value">4.9</div>
+            <div class="hero__stat-label">Average Rating</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <div class="hero__cards">
+          <div class="hero__card hero__card--1">
+            <div class="hero__card-icon">🎨</div>
+            <div class="hero__card-title">Premium Design</div>
+          </div>
+          <div class="hero__card hero__card--2">
+            <div class="hero__card-icon">⚡</div>
+            <div class="hero__card-title">Fast Delivery</div>
+          </div>
+          <div class="hero__card hero__card--3">
+            <div class="hero__card-icon">🛡️</div>
+            <div class="hero__card-title">Secure Payment</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="categories">
+      <div class="categories__header">
+        <h2 class="categories__title">Browse by Category</h2>
+        <p class="categories__description">Find exactly what you need</p>
+      </div>
+
+      <div class="categories__grid">
+        <div class="category-card category-card--design">
+          <div class="category-card__icon">🎨</div>
+          <h3 class="category-card__title">UI Kits</h3>
+          <p class="category-card__count">120+ products</p>
+        </div>
+        <div class="category-card category-card--code">
+          <div class="category-card__icon">⚛️</div>
+          <h3 class="category-card__title">Templates</h3>
+          <p class="category-card__count">85+ products</p>
+        </div>
+        <div class="category-card category-card--animation">
+          <div class="category-card__icon">✨</div>
+          <h3 class="category-card__title">Animations</h3>
+          <p class="category-card__count">60+ products</p>
+        </div>
+        <div class="category-card category-card--tools">
+          <div class="category-card__icon">🔧</div>
+          <h3 class="category-card__title">Dev Tools</h3>
+          <p class="category-card__count">45+ products</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product Showcase -->
+    <ProductShowcase client:load />
+
+    <!-- Trust Section -->
+    <section class="trust">
+      <div class="trust__content">
+        <h2 class="trust__title">Trusted by thousands of developers worldwide</h2>
+        <div class="trust__features">
+          <div class="trust__feature">
+            <div class="trust__feature-icon">✓</div>
+            <div class="trust__feature-text">
+              <div class="trust__feature-title">Quality Guaranteed</div>
+              <div class="trust__feature-description">Every product is carefully reviewed</div>
+            </div>
+          </div>
+          <div class="trust__feature">
+            <div class="trust__feature-icon">✓</div>
+            <div class="trust__feature-text">
+              <div class="trust__feature-title">Instant Access</div>
+              <div class="trust__feature-description">Download immediately after purchase</div>
+            </div>
+          </div>
+          <div class="trust__feature">
+            <div class="trust__feature-icon">✓</div>
+            <div class="trust__feature-text">
+              <div class="trust__feature-title">Lifetime Updates</div>
+              <div class="trust__feature-description">Get all future updates for free</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+
+
