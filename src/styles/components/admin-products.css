@@ -80,12 +80,12 @@
   color: var(--sidebar-text);
   display: flex;
   flex-direction: column;
-  position: sticky;
   top: 0;
   height: calc(100vh - 64px);
   overflow-y: auto;
   border-right: 1px solid rgba(0, 0, 0, 0.15);
   flex-shrink: 0;
+  
 }
 
 /* Custom scrollbar for sidebar */
