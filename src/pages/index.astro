@@ -112,7 +112,14 @@ import "../styles/components/homepage.css";
     </section>
 
     <!-- Product Showcase -->
-    <ProductShowcase client:load />
+    <ProductShowcase
+      client:load
+      heading="Latest drops for builders"
+      description="Here are the five most recent products to land in the marketplace."
+      statusBadge="Fresh"
+      sort="newest"
+      limit={5}
+    />
 
     <!-- Trust Section -->
     <section class="trust">
@@ -145,6 +152,5 @@ import "../styles/components/homepage.css";
     </section>
   </div>
 </Layout>
-
 
 
