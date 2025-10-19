@@ -3,6 +3,8 @@ import "../../styles/components/admin-products.css";
 import ProductAdminForm from "./ProductAdminForm";
 import ProductAdminList from "./ProductAdminList";
 import { useProductAdmin } from "./useProductAdmin";
+import { authService } from "../../services/authService";
+import { apiClient } from "../../lib/api";
 
 type FormSection = "general" | "pricing" | "inventory" | "media" | "metadata" | "ratings" | null;
 
@@ -33,6 +35,7 @@ const ProductAdminPanel = () => {
   // Form visibility state
   const [showForm, setShowForm] = useState(false);
   const [activeSection, setActiveSection] = useState<FormSection>("general");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const featuredCount = products.filter((product) => product.featured).length;
   const lowStockCount = products.filter((product) => product.inventoryStatus === "LOW_STOCK").length;
@@ -73,6 +76,28 @@ const ProductAdminPanel = () => {
     startEditing(productId);
     setShowForm(true);
     setActiveSection("general");
+  };
+
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+    setIsLoggingOut(true);
+
+    try {
+      await authService.logout();
+    } catch (logoutError) {
+      console.warn("[ProductAdminPanel] Logout request failed", logoutError);
+    } finally {
+      try {
+        localStorage.removeItem("frontend_shop_token");
+        apiClient.setHeader("Authorization", "");
+      } catch (error) {
+        console.warn("[ProductAdminPanel] Failed to clear auth state", error);
+      }
+
+      const baseUrl = import.meta.env.BASE_URL ?? "/";
+      const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+      window.location.assign(`${normalizedBase}login`);
+    }
   };
 
   return (
@@ -212,7 +237,15 @@ const ProductAdminPanel = () => {
               onClick={refresh}
               disabled={isFetching}
             >
-              {isFetching ? "Refreshingâ€¦" : "Refresh"}
+              {isFetching ? "Refreshing…" : "Refresh"}
+            </button>
+            <button
+              type="button"
+              className="admin-main__header-button admin-main__header-button--secondary"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+            >
+              {isLoggingOut ? "Logging out..." : "Log out"}
             </button>
             <button
               type="button"

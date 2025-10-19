@@ -26,6 +26,7 @@ export interface Product {
   serialNumber?: string;
   stock?: number;
   currency?: string;
+  createdAt?: string;
 }
 
 export interface ListProductsOptions {
@@ -65,6 +66,7 @@ interface RawProduct {
   featured?: boolean;
   serialNumber?: string;
   stock?: number;
+  createdAt?: string;
 }
 
 export interface ProductListResponse {
@@ -192,6 +194,7 @@ function mapProduct(raw: RawProduct): Product {
     stock: raw.stock,
     currency:
       raw.currency || (typeof raw.price === "object" ? raw.price?.currency : undefined) || "USD",
+    createdAt: raw.createdAt,
   };
 }
 
@@ -279,4 +282,6 @@ function ensureAuthHeader() {
   const token = localStorage.getItem("frontend_shop_token");
   if (!token) return;
   apiClient.setHeader("Authorization", `Bearer ${token}`);
+
+}
 

@@ -160,6 +160,7 @@ const ProductShowcase = ({
   }, [
     search,
     selectedCategory,
+    initialTags,
     tagsKey,
     minPrice,
     maxPrice,

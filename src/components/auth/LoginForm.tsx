@@ -191,6 +191,11 @@ const LoginForm = ({
 
 function extractErrorMessage(error: unknown) {
   if (error instanceof ApiError) {
+    // Check if it's an authentication error (401 or 403)
+    if (error.status === 401 || error.status === 403) {
+      return "Wrong email or password. Please try again.";
+    }
+
     const data = error.data;
     if (data && typeof data === "object" && "message" in data) {
       const message = (data as { message?: unknown }).message;
