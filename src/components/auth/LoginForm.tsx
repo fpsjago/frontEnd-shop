@@ -73,8 +73,9 @@ const LoginForm = ({
         );
       }
 
-      if (redirectTo) {
-        window.location.assign(redirectTo);
+      const resolvedRedirect = resolveRedirectUrl(redirectTo);
+      if (resolvedRedirect) {
+        window.location.assign(resolvedRedirect);
       } else {
         form.reset();
       }
@@ -219,6 +220,16 @@ function applyAuthHeader(token: string) {
   }
 }
 
+function resolveRedirectUrl(target?: string) {
+  if (!target) return undefined;
+  if (/^https?:\/\//i.test(target)) {
+    return target;
+  }
+  const baseUrl = import.meta.env.BASE_URL ?? "/";
+  const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+  if (target === "/") return normalizedBase;
+  return `${normalizedBase}${target.replace(/^\//, "")}`;
+}
 
 
 export default LoginForm;
