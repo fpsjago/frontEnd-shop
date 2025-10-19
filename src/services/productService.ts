@@ -277,13 +277,6 @@ export type { Product as ProductModel };
 function ensureAuthHeader() {
   if (typeof window === "undefined") return;
   const token = localStorage.getItem("frontend_shop_token");
-  if (!token) {
-    apiClient.removeHeader("Authorization");
-    return;
-  }
+  if (!token) return;
   apiClient.setHeader("Authorization", `Bearer ${token}`);
-}
-
-
-
 
