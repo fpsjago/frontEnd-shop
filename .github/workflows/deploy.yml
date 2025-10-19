@@ -17,6 +17,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: github-pages
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,6 +33,12 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          PUBLIC_API_URL: ${{ vars.PUBLIC_API_URL }}
+          PUBLIC_AWS_ACCESS_KEY_ID: ${{ vars.PUBLIC_AWS_ACCESS_KEY_ID }}
+          PUBLIC_AWS_SECRET_ACCESS_KEY: ${{ vars.PUBLIC_AWS_SECRET_ACCESS_KEY }}
+          PUBLIC_AWS_REGION: ${{ vars.PUBLIC_AWS_REGION }}
+          PUBLIC_S3_BUCKET: ${{ vars.PUBLIC_S3_BUCKET }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
