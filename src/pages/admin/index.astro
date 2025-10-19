@@ -13,8 +13,22 @@ import ProductAdminPanel from "../../components/products/ProductAdminPanel";
 
 <script>
   // Client-side authentication check
+  function getTokenFromCookie(): string | null {
+    try {
+      const cookies = document.cookie.split("; ");
+      const tokenCookie = cookies.find(cookie => cookie.startsWith("frontend_shop_token="));
+      if (tokenCookie) {
+        return decodeURIComponent(tokenCookie.split("=")[1]);
+      }
+      return null;
+    } catch (error) {
+      console.warn("[Admin] Failed to read token from cookie:", error);
+      return null;
+    }
+  }
+
   function checkAuth() {
-    const token = localStorage.getItem("frontend_shop_token");
+    const token = getTokenFromCookie();
 
     if (!token) {
       const baseUrl = import.meta.env.BASE_URL ?? "/";

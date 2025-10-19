@@ -38,7 +38,7 @@ const LoginForm = ({
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const storedToken = localStorage.getItem("frontend_shop_token");
+    const storedToken = getTokenFromCookie();
     if (storedToken) {
       applyAuthHeader(storedToken);
     }
@@ -65,12 +65,9 @@ const LoginForm = ({
       onSuccess?.(auth);
 
       if (auth?.token) {
-        persistToken(auth.token);
+        persistTokenToCookie(auth.token);
         applyAuthHeader(auth.token);
-        console.log(
-          "[LoginForm] persisted token:",
-          typeof window !== "undefined" ? localStorage.getItem("frontend_shop_token") : null
-        );
+        console.log("[LoginForm] Token stored in secure cookie");
       }
 
       const resolvedRedirect = resolveRedirectUrl(redirectTo);
@@ -209,11 +206,38 @@ function extractErrorMessage(error: unknown) {
   return "Unable to log in. Please try again.";
 }
 
-function persistToken(token: string) {
+function persistTokenToCookie(token: string) {
   try {
-    localStorage.setItem("frontend_shop_token", token);
-  } catch (storageError) {
-    console.warn("[LoginForm] Failed to persist token to localStorage:", storageError);
+    // Set cookie with security attributes
+    // Note: httpOnly can only be set server-side, but we set other security attributes
+    const maxAge = 7 * 24 * 60 * 60; // 7 days in seconds
+    const isProduction = window.location.protocol === "https:";
+
+    let cookieString = `frontend_shop_token=${encodeURIComponent(token)}; max-age=${maxAge}; path=/; SameSite=Strict`;
+
+    // Only set Secure flag in production (HTTPS)
+    if (isProduction) {
+      cookieString += "; Secure";
+    }
+
+    document.cookie = cookieString;
+    console.log("[LoginForm] Token stored in cookie with security attributes");
+  } catch (error) {
+    console.warn("[LoginForm] Failed to persist token to cookie:", error);
+  }
+}
+
+function getTokenFromCookie(): string | null {
+  try {
+    const cookies = document.cookie.split("; ");
+    const tokenCookie = cookies.find(cookie => cookie.startsWith("frontend_shop_token="));
+    if (tokenCookie) {
+      return decodeURIComponent(tokenCookie.split("=")[1]);
+    }
+    return null;
+  } catch (error) {
+    console.warn("[LoginForm] Failed to read token from cookie:", error);
+    return null;
   }
 }
 

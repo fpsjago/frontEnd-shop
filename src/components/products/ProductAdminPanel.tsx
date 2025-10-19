@@ -88,8 +88,10 @@ const ProductAdminPanel = () => {
       console.warn("[ProductAdminPanel] Logout request failed", logoutError);
     } finally {
       try {
-        localStorage.removeItem("frontend_shop_token");
+        // Clear cookie by setting it with max-age=0
+        document.cookie = "frontend_shop_token=; max-age=0; path=/; SameSite=Strict";
         apiClient.setHeader("Authorization", "");
+        console.log("[ProductAdminPanel] Auth cookie cleared");
       } catch (error) {
         console.warn("[ProductAdminPanel] Failed to clear auth state", error);
       }
@@ -237,7 +239,7 @@ const ProductAdminPanel = () => {
               onClick={refresh}
               disabled={isFetching}
             >
-              {isFetching ? "Refreshing…" : "Refresh"}
+              {isFetching ? "Refreshingï¿½" : "Refresh"}
             </button>
             <button
               type="button"

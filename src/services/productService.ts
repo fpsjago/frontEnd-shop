@@ -279,9 +279,22 @@ export type { Product as ProductModel };
 
 function ensureAuthHeader() {
   if (typeof window === "undefined") return;
-  const token = localStorage.getItem("frontend_shop_token");
+  const token = getTokenFromCookie();
   if (!token) return;
   apiClient.setHeader("Authorization", `Bearer ${token}`);
+}
 
+function getTokenFromCookie(): string | null {
+  try {
+    const cookies = document.cookie.split("; ");
+    const tokenCookie = cookies.find(cookie => cookie.startsWith("frontend_shop_token="));
+    if (tokenCookie) {
+      return decodeURIComponent(tokenCookie.split("=")[1]);
+    }
+    return null;
+  } catch (error) {
+    console.warn("[productService] Failed to read token from cookie:", error);
+    return null;
+  }
 }
 
